@@ -1,6 +1,6 @@
 extends "res://World/Sign.gd"
 
-signal pressed
+signal pressed(switch)
 
 export (bool) var SINGLE_USE = true
 var is_pressed := false
@@ -20,4 +20,9 @@ func switch() -> void:
 		else:
 			frame = 0
 			emit_signal("pressed", self)
-		
+
+func reset() -> void:
+	is_pressed = false
+	is_interactive = true
+	frame = 0
+	

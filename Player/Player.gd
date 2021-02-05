@@ -126,3 +126,6 @@ func revive() -> void:
 func _on_HurtArea_area_entered(area):
 	is_dead = true
 	emit_signal("dying")
+
+func _on_DespawnArea_area_entered(area):
+	area.get_owner().queue_free()

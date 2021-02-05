@@ -42,7 +42,7 @@ func update_sprites() -> void:
 	if total == 4:
 		wall.activate()		
 		
-func _on_Switch_pressed(switch: Sign) -> void:
+func _on_Switch_pressed(_switch: Sign) -> void:
 	activate_mechanism()
 	update_sprites()
 	

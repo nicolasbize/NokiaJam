@@ -13,3 +13,7 @@ script = ExtResource( 3 )
 [node name="Area2D" parent="." index="1" groups=[
 "Switchable",
 ]]
+
+[node name="ArrowSprite" parent="." index="2"]
+visible = true
+position = Vector2( 0, 2 )

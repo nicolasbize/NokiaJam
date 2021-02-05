@@ -120,6 +120,8 @@ restart={
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Interactive"
 2d_physics/layer_5="Trigger"
+2d_physics/layer_6="Destroyable"
+2d_physics/layer_7="Projectiles"
 
 [physics]
 
