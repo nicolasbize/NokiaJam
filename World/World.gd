@@ -6,6 +6,7 @@ var pending_restart : bool = false
 onready var player := $Player
 onready var ui := $UI
 onready var camera := $Camera2D
+onready var squisher := $Traps/Squisher
 
 func _on_Checkpoint_checkpoint(checkpoint:Node2D) -> void:
 	last_checkpoint = checkpoint
@@ -18,8 +19,9 @@ func _process(delta) -> void:
 		pending_restart = false
 		player.transform = last_checkpoint.transform
 		player.revive()
+		if not GameState.solved_squisher:
+			squisher.reset_trap()
 		ui.clear()
 
-
 func _on_Player_dying():
-	camera.screen_shake(1, 0.5)
+	camera.screen_shake(0.3, 0.5)
