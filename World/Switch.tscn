@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/Sprites/switch.png" type="Texture" id=1]
+[ext_resource path="res://World/Sign.tscn" type="PackedScene" id=2]
+[ext_resource path="res://World/Switch.gd" type="Script" id=3]
+
+[node name="Switch" instance=ExtResource( 2 )]
+texture = ExtResource( 1 )
+offset = Vector2( -4, -8 )
+hframes = 2
+script = ExtResource( 3 )
+
+[node name="Area2D" parent="." index="1" groups=[
+"Switchable",
+]]

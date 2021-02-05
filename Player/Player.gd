@@ -25,6 +25,7 @@ onready var interaction_area = $InteractionArea
 
 func _physics_process(delta) -> void:
 	if not is_dead:
+		visible = true
 		if not is_reading:
 			just_jumped = false
 			var input_vector := get_input_vector()
@@ -78,15 +79,16 @@ func interaction_check():
 	var interacted : Array = interaction_area.get_overlapping_areas()
 	if Input.is_action_just_pressed("interact") and interacted.size() > 0:
 		var item : Area2D = interacted[0]
-		if item.is_in_group("Readable"):
+		if item.is_in_group("Switchable"):
+			item.get_parent().switch()
+		elif item.is_in_group("Readable"):
 			if is_reading:
 				emit_signal("stop_reading")
 				is_reading = false
 			else:
 				emit_signal("start_reading", item.get_parent().text)
 				is_reading = true
-		elif item.is_in_group("Switchable"):
-			item.get_parent().switch()
+		
 
 func apply_gravity(delta):
 	motion.y += GRAVITY * delta
