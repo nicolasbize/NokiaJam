@@ -2,7 +2,7 @@ extends Node2D
 
 enum DIRECTION {LEFT = -1, RIGHT = 1}
 
-const CannonBall = preload("res://World/CannonBall.tscn")
+const CannonBall = preload("res://World/Cannon/CannonBall.tscn")
 
 export (int) var cooldown_time = 3
 export (DIRECTION) var direction = DIRECTION.RIGHT
@@ -13,7 +13,7 @@ onready var switch = $Switch
 
 var can_fire:bool = true
 
-func _process(delta) -> void:
+func _process(_delta) -> void:
 	sprite.flip_h = direction == DIRECTION.LEFT
 
 func _on_Switch_pressed(_switch) -> void:
@@ -30,7 +30,7 @@ func fire() -> void:
 		ball.speed = -ball.speed
 	timer.start(cooldown_time)
 
-func _on_Timer_timeout():
+func _on_Timer_timeout() -> void:
 	can_fire = true
 	switch.reset()
 	

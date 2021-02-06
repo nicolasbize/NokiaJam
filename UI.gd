@@ -8,12 +8,12 @@ func _on_Player_start_reading(text:String) -> void:
 	sign_label.text = text
 	sign_reading.visible = true
 	
-func _on_Player_stop_reading():
+func _on_Player_stop_reading() -> void:
 	clear()
 
-func _on_Player_game_over():
+func _on_Player_game_over() -> void:
 	restart_label.visible = true
 
-func clear():
+func clear() -> void:
 	sign_reading.visible = false
 	restart_label.visible = false

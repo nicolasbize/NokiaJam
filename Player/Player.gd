@@ -55,7 +55,7 @@ func apply_friction(input_vector) -> void:
 	if input_vector.x == 0:
 		motion.x = lerp(motion.x, 0, FRICTION)
 
-func update_snap_vector():
+func update_snap_vector() -> void:
 	if is_on_floor():
 		snap_vector = Vector2.DOWN
 
@@ -65,7 +65,7 @@ func duck_check() -> void:
 	elif is_ducking and Input.is_action_just_released("ui_down"):
 		is_ducking = false
 
-func jump_check():
+func jump_check() -> void:
 	if is_on_floor():
 		if Input.is_action_just_pressed("jump"):
 			motion.y = -JUMP_FORCE
@@ -75,7 +75,7 @@ func jump_check():
 			motion.y = -JUMP_FORCE / 2
 	snap_vector = Vector2.ZERO
 
-func interaction_check():
+func interaction_check() -> void:
 	var interacted : Array = interaction_area.get_overlapping_areas()
 	if Input.is_action_just_pressed("interact") and interacted.size() > 0:
 		var item : Area2D = interacted[0]
@@ -90,11 +90,11 @@ func interaction_check():
 				is_reading = true
 		
 
-func apply_gravity(delta):
+func apply_gravity(delta) -> void:
 	motion.y += GRAVITY * delta
 	motion.y = min(motion.y, JUMP_FORCE)
 
-func update_animations(input_vector):
+func update_animations(input_vector) -> void:
 	if input_vector.x != 0:
 		sprite.scale.x = sign(input_vector.x)
 		animation_player.play("Run")
@@ -123,9 +123,6 @@ func revive() -> void:
 	visible = true
 	motion = Vector2.ZERO
 
-func _on_HurtArea_area_entered(area):
+func _on_HurtArea_area_entered(_area) -> void:
 	is_dead = true
 	emit_signal("dying")
-
-func _on_DespawnArea_area_entered(area):
-	area.get_owner().queue_free()

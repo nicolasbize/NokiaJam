@@ -20,7 +20,7 @@ onready var vision_ray = $AttackArea/VisionRay
 func _ready() -> void:
 	state = WALKING_DIRECTION
 
-func _physics_process(delta) -> void:
+func _physics_process(_delta) -> void:
 	update_movement()
 	sprite.scale.x = sign(motion.x)
 	motion = move_and_slide_with_snap(motion, Vector2.DOWN*4, Vector2.UP, true, 4, deg2rad(46))
@@ -57,6 +57,6 @@ func update_animations() -> void:
 		animation_player.play("Walk")
 	
 
-func _on_AttackArea_area_entered(area):
+func _on_AttackArea_area_entered(_area) -> void:
 	if not is_attacking:
 		is_attacking = true

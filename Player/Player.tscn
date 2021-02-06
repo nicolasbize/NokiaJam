@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Assets/Sprites/hero.png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 3 )
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=2]
 resource_name = "Die"
 length = 0.8
 step = 0.2
@@ -37,7 +37,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=3]
 resource_name = "Duck"
 length = 0.1
 loop = true
@@ -78,8 +78,7 @@ tracks/2/keys = {
 "values": [ Vector2( 2, 1 ) ]
 }
 
-[sub_resource type="Animation" id=2]
-resource_name = "Idle"
+[sub_resource type="Animation" id=4]
 length = 0.1
 loop = true
 tracks/0/type = "value"
@@ -119,8 +118,7 @@ tracks/2/keys = {
 "values": [ Vector2( 2, 3 ) ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "Jump"
+[sub_resource type="Animation" id=5]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -160,8 +158,7 @@ tracks/2/keys = {
 "values": [ Vector2( 2, 3 ) ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "Run"
+[sub_resource type="Animation" id=6]
 length = 0.8
 loop = true
 step = 0.2
@@ -202,14 +199,11 @@ tracks/2/keys = {
 "values": [ Vector2( 0, -4 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 3, 3 )
 
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 2, 3 )
-
-[sub_resource type="RectangleShape2D" id=9]
-extents = Vector2( 10, 65 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -230,11 +224,11 @@ shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
-anims/Die = SubResource( 6 )
-anims/Duck = SubResource( 7 )
-anims/Idle = SubResource( 2 )
-anims/Jump = SubResource( 4 )
-anims/Run = SubResource( 3 )
+anims/Die = SubResource( 2 )
+anims/Duck = SubResource( 3 )
+anims/Idle = SubResource( 4 )
+anims/Jump = SubResource( 5 )
+anims/Run = SubResource( 6 )
 
 [node name="CameraFollow" type="RemoteTransform2D" parent="."]
 update_rotation = false
@@ -248,7 +242,7 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 visible = false
 position = Vector2( 0, -4 )
-shape = SubResource( 5 )
+shape = SubResource( 7 )
 
 [node name="HurtArea" type="Area2D" parent="."]
 collision_layer = 0
@@ -257,22 +251,4 @@ collision_mask = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea"]
 position = Vector2( 0, -4 )
 shape = SubResource( 8 )
-
-[node name="DespawnArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 64
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DespawnArea"]
-position = Vector2( -110, 0 )
-shape = SubResource( 9 )
-
-[node name="DespawnArea2" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 64
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DespawnArea2"]
-position = Vector2( 109, -1 )
-shape = SubResource( 9 )
 [connection signal="area_entered" from="HurtArea" to="." method="_on_HurtArea_area_entered"]
-[connection signal="area_entered" from="DespawnArea" to="." method="_on_DespawnArea_area_entered"]
-[connection signal="area_entered" from="DespawnArea2" to="." method="_on_DespawnArea_area_entered"]

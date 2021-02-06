@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "Sprite",
 "class": "Sign",
 "language": "GDScript",
-"path": "res://World/Sign.gd"
+"path": "res://World/Interactive/Sign.gd"
 } ]
 _global_script_class_icons={
 "Sign": ""
@@ -126,6 +126,7 @@ restart={
 2d_physics/layer_5="Trigger"
 2d_physics/layer_6="Destroyable"
 2d_physics/layer_7="Projectiles"
+2d_physics/layer_8="Collectibles"
 
 [physics]
 

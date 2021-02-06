@@ -1,4 +1,4 @@
-extends "res://World/Sign.gd"
+extends "res://World/Interactive/Sign.gd"
 
 signal pressed(switch)
 

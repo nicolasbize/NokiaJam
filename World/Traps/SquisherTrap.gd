@@ -11,17 +11,18 @@ func _ready() -> void:
 	if camera == null:
 		print("no camera")
 
-func reset_trap():
-	print("reseting trap")
+func reset_trap() -> void:
 	safe_area.monitoring = false
 	animation_player.play("Reset")
 	switch.reset()
 
-func _on_Switch_pressed(switch):
+func _on_Switch_pressed(_switch) -> void:
 	animation_player.play("Activate")
 	camera.screen_shake(0.1, 1.2)
-	safe_area.monitoring = true
+	safe_area.set_deferred("monitoring", true)
 
-func _on_SafeArea_area_entered(area):
+func _on_SafeArea_area_entered(_area) -> void:
+	print("squisher solved!")
 	GameState.solved_squisher = true
-	safe_area.monitoring = false
+	safe_area.set_deferred("monitoring", false)
+	

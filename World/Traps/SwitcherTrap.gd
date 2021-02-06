@@ -5,6 +5,7 @@ onready var bit_parent := $Wall/Sprite/Bits
 onready var switch_parent := $Switches
 onready var stone_parent := $Stones
 onready var wall := $Wall
+onready var safe_area := $SafeArea2D
 
 var bits := []
 var ties := []
@@ -48,6 +49,20 @@ func _on_Switch_pressed(_switch: Sign) -> void:
 	
 func activate_mechanism() -> void:
 	if not is_activated:
+		safe_area.set_deferred("monitoring", true)
 		is_activated = true
 		for stone in stones:
 			stone.activate()
+
+func reset_trap() -> void:
+	is_activated = false
+	for stone in stones:
+		stone.reset()
+	for switch in switches:
+		switch.reset()
+	update_sprites()
+
+func _on_SafeArea2D_area_entered(_area) -> void:
+	print("switcher solved!")
+	GameState.solved_switcher = true
+	safe_area.set_deferred("monitoring", false)
