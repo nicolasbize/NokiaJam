@@ -1,3 +1,5 @@
+## A weight press that will trigger when pressed or unpressed
+class_name Press
 extends Node2D
 
 export (bool) var is_pressed = false
@@ -16,15 +18,15 @@ func _process(delta) -> void:
 	if is_pressed:
 		global_position += Vector2(0, 1)
 
-func _on_Area2D_area_entered(area):
-	timer.start()
-
 func _on_Timer_timeout():
 	if not is_pressed:
 		is_pressed = true
 		emit_signal("press_change", is_pressed)
 
-func _on_Area2D_area_exited(area):
+func _on_PlayerTrigger_area_entered(area):
+	timer.start()
+
+func _on_PlayerTrigger_area_exited(area):
 	timer.stop()
 	is_pressed = false
 	emit_signal("press_change", is_pressed)

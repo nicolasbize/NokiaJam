@@ -1,28 +1,49 @@
-extends "res://World/Interactive/Sign.gd"
+## Switch Button that can be either pressed or released
+class_name Switch
+extends Sprite
+signal status_change(pressed)
 
-signal pressed(switch)
+export(int) var reset_cooldown = 0
+export(bool) var is_toggle = false
+export(bool) var is_enabled = true
+export(bool) var is_pressed = false
+export(bool) var is_single_use = false
+export(String) var data = ""
 
-export (bool) var SINGLE_USE = true
-var is_pressed := false
+onready var hint_pointer = $HintPointer
+onready var timer_reset = $TimerReset
 
-func switch() -> void:
-	if SINGLE_USE and not is_pressed:
-		is_pressed = true
-		is_interactive = false
-		animation_player.play("Idle")
-		emit_signal("pressed", self)
-		frame = 1
-	elif not SINGLE_USE:
-		is_pressed = !is_pressed
-		if is_pressed:
-			frame = 1
-			emit_signal("pressed", self)
+func _process(delta) -> void:
+	frame = 1 if is_pressed else 0
+
+func use() -> void:
+	var prev_state = is_pressed
+	if is_enabled:
+		if is_toggle:
+			is_pressed = !is_pressed
 		else:
-			frame = 0
-			emit_signal("pressed", self)
+			is_pressed = true
+			if is_single_use:
+				is_enabled = false
+				hint_pointer.visible = false
+			if reset_cooldown > 0:
+				timer_reset.start(reset_cooldown)
+	if is_pressed != prev_state:
+		emit_signal("status_change", is_pressed)
 
 func reset() -> void:
 	is_pressed = false
-	is_interactive = true
-	frame = 0
-	
+	is_enabled = true
+
+func _on_PlayerTrigger_area_entered(area):
+	if is_enabled:
+		hint_pointer.visible = true
+
+func _on_PlayerTrigger_area_exited(area):
+	hint_pointer.visible = false
+
+func _on_PlayerTrigger_use(player):
+	use()
+
+func _on_TimerReset_timeout():
+	reset()

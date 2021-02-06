@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Assets/Sprites/hero.png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
+[ext_resource path="res://Colliders/HurtBox.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 3 )
@@ -20,7 +21,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.2, 0.4, 0.6 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 4, 5, 6, 7 ]
+"values": [ 5, 6, 7, 8 ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath(".")
@@ -53,30 +54,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 4 ]
 }
-tracks/1/type = "value"
-tracks/1/path = NodePath("HurtArea/CollisionShape2D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, -1 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("HurtArea/CollisionShape2D:shape:extents")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 2, 1 ) ]
-}
 
 [sub_resource type="Animation" id=4]
 length = 0.1
@@ -93,30 +70,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 0 ]
 }
-tracks/1/type = "value"
-tracks/1/path = NodePath("HurtArea/CollisionShape2D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, -3 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("HurtArea/CollisionShape2D:shape:extents")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 2, 3 ) ]
-}
 
 [sub_resource type="Animation" id=5]
 length = 0.2
@@ -132,30 +85,6 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 3 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("HurtArea/CollisionShape2D:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, -4 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("HurtArea/CollisionShape2D:shape:extents")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 2, 3 ) ]
 }
 
 [sub_resource type="Animation" id=6]
@@ -174,32 +103,8 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 1, 0, 2, 0 ]
 }
-tracks/1/type = "value"
-tracks/1/path = NodePath("HurtArea/CollisionShape2D:shape:extents")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 2, 3 ) ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("HurtArea/CollisionShape2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector2( 0, -4 ) ]
-}
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=7]
 resource_name = "WallSlide"
 length = 0.1
 loop = true
@@ -216,14 +121,15 @@ tracks/0/keys = {
 "values": [ 9 ]
 }
 
-[sub_resource type="RectangleShape2D" id=7]
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 3, 3 )
 
-[sub_resource type="RectangleShape2D" id=8]
-extents = Vector2( 2, 3 )
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 2, 2 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
+collision_mask = 41
 script = ExtResource( 2 )
 can_wall_jump = true
 
@@ -233,8 +139,9 @@ centered = false
 offset = Vector2( -4, -8 )
 vframes = 2
 hframes = 5
+frame = 5
 
-[node name="WorldCollider" type="CollisionShape2D" parent="."]
+[node name="WorldCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( 0, -3 )
 shape = SubResource( 1 )
@@ -246,27 +153,29 @@ anims/Duck = SubResource( 3 )
 anims/Idle = SubResource( 4 )
 anims/Jump = SubResource( 5 )
 anims/Run = SubResource( 6 )
-anims/WallSlide = SubResource( 9 )
+anims/WallSlide = SubResource( 7 )
 
 [node name="CameraFollow" type="RemoteTransform2D" parent="."]
+position = Vector2( 0, -9 )
 update_rotation = false
 update_scale = false
 
-[node name="InteractionArea" type="Area2D" parent="."]
+[node name="PlayerTriggerEmitter" type="Area2D" parent="."]
 visible = false
-collision_layer = 2
-collision_mask = 8
+collision_layer = 16
+collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-visible = false
-position = Vector2( 0, -4 )
-shape = SubResource( 7 )
-
-[node name="HurtArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 4
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerTriggerEmitter"]
 position = Vector2( 0, -4 )
 shape = SubResource( 8 )
-[connection signal="area_entered" from="HurtArea" to="." method="_on_HurtArea_area_entered"]
+
+[node name="HurtBox" parent="." instance=ExtResource( 3 )]
+collision_layer = 256
+collision_mask = 0
+
+[node name="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2( 0, -3 )
+shape = SubResource( 9 )
+[connection signal="hit" from="HurtBox" to="." method="_on_HurtBox_hit"]
+
+[editable path="HurtBox"]

@@ -1,37 +1,39 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Assets/Sprites/floor_spikes.png" type="Texture" id=1]
 [ext_resource path="res://World/Traps/FloorSpikes.gd" type="Script" id=2]
-[ext_resource path="res://Monsters/KillArea.tscn" type="PackedScene" id=3]
-
-
+[ext_resource path="res://Colliders/HitBox.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Colliders/PlayerTrigger.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 4, 8 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 3, 1 )
+extents = Vector2( 3, 3 )
 
 [node name="FloorSpikes" type="Sprite"]
 texture = ExtResource( 1 )
 centered = false
+offset = Vector2( 0, -8 )
 hframes = 2
 script = ExtResource( 2 )
 
-[node name="DetectionArea" type="Area2D" parent="."]
-collision_layer = 16
-collision_mask = 2
+[node name="PlayerTrigger" parent="." instance=ExtResource( 4 )]
+visible = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
-position = Vector2( 4, 0 )
+[node name="CollisionShape2D" parent="PlayerTrigger" index="0"]
+position = Vector2( 4, -8 )
 shape = SubResource( 1 )
 
-[node name="KillArea" parent="." instance=ExtResource( 3 )]
-script = null
+[node name="HitBox" parent="." instance=ExtResource( 3 )]
+collision_mask = 256
 
-[node name="CollisionShape2D" parent="KillArea" index="0"]
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+position = Vector2( 5, -3 )
 shape = SubResource( 2 )
-[connection signal="body_entered" from="DetectionArea" to="." method="_on_Area2D_body_entered"]
-[connection signal="body_exited" from="DetectionArea" to="." method="_on_Area2D_body_exited"]
+[connection signal="area_entered" from="PlayerTrigger" to="." method="_on_PlayerTrigger_area_entered"]
+[connection signal="area_exited" from="PlayerTrigger" to="." method="_on_PlayerTrigger_area_exited"]
 
-[editable path="KillArea"]
+[editable path="PlayerTrigger"]
+
+[editable path="HitBox"]

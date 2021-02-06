@@ -19,15 +19,23 @@ var just_jumped := false
 var is_reading := false
 var is_dead := false
 var is_ducking := false
+var camera:Camera2D = null
 
 signal stop_reading
 signal start_reading
 signal game_over
-signal dying
 
-onready var sprite = $Sprite
-onready var animation_player = $AnimationPlayer
-onready var interaction_area = $InteractionArea
+onready var sprite := $Sprite
+onready var animation_player := $AnimationPlayer
+onready var player_trigger_emitter := $PlayerTriggerEmitter
+onready var camera_follow := $CameraFollow
+
+func _ready() -> void:
+	camera = get_node("/root/World/Camera2D")
+	if camera == null:
+		print("no camera")
+	else:
+		camera_follow.remote_path = camera.get_path()
 
 func _physics_process(delta) -> void:
 	just_jumped = false
@@ -97,19 +105,18 @@ func jump_check() -> void:
 	snap_vector = Vector2.ZERO
 
 func interaction_check() -> void:
-	var interacted : Array = interaction_area.get_overlapping_areas()
+	var interacted : Array = player_trigger_emitter.get_overlapping_areas()
 	if Input.is_action_just_pressed("interact") and interacted.size() > 0:
-		var item : Area2D = interacted[0]
-		if item.is_in_group("Switchable"):
-			item.get_parent().switch()
-		elif item.is_in_group("Readable"):
-			if is_reading:
-				emit_signal("stop_reading")
-				is_reading = false
-			else:
-				emit_signal("start_reading", item.get_parent().text)
-				is_reading = true
-		
+		for item in interacted:
+			item.emit_signal("use", self)
+
+func use_sign(text) -> void:
+	if is_reading:
+		emit_signal("stop_reading")
+		is_reading = false
+	else:
+		emit_signal("start_reading", text)
+		is_reading = true
 
 func apply_gravity(delta) -> void:
 	motion.y += GRAVITY * delta
@@ -176,7 +183,6 @@ func wall_detach_check(wall_axis):
 	if wall_axis == 0 or is_on_floor():
 		state = MOVE
 
-func _on_HurtArea_area_entered(_area) -> void:
+func _on_HurtBox_hit(damage):
+	camera.screen_shake(0.3, 0.5)
 	is_dead = true
-	emit_signal("dying")
-

@@ -1,36 +1,33 @@
 extends Node2D
 
-enum DIRECTION {LEFT = -1, RIGHT = 1}
+const CannonBall = preload("res://Projectiles/CannonBall.tscn")
 
-const CannonBall = preload("res://World/Cannon/CannonBall.tscn")
+export(int) var cooldown_time = 3
+export(int) var bullet_speed = 20
+export(NodePath) var switch = null
 
-export (int) var cooldown_time = 3
-export (DIRECTION) var direction = DIRECTION.RIGHT
-
-onready var sprite = $Sprite
+onready var nozzle = $Sprite/Nozzle
 onready var timer = $Timer
-onready var switch = $Switch
 
 var can_fire:bool = true
 
-func _process(_delta) -> void:
-	sprite.flip_h = direction == DIRECTION.LEFT
+func _ready() -> void:
+	if switch == null:
+		timer.start(cooldown_time)
+	else:
+		get_node(switch).connect("status_change", self, "_on_Switch_status_change")
 
-func _on_Switch_pressed(_switch) -> void:
-	if can_fire:
-		fire()
+func _on_Switch_status_change(pressed) -> void:
+	fire()
 		
 func fire() -> void:
-	can_fire = false
 	var ball := CannonBall.instance()
 	get_parent().add_child(ball)
 	get_parent().move_child(ball, 0)
-	ball.global_position = sprite.global_position + Vector2(0, -1)
-	if direction == DIRECTION.LEFT:
-		ball.speed = -ball.speed
+	ball.global_position = nozzle.global_position
+	ball.velocity = Vector2.UP.rotated(rotation) * bullet_speed
 	timer.start(cooldown_time)
 
 func _on_Timer_timeout() -> void:
-	can_fire = true
-	switch.reset()
-	
+	if switch == null:
+		fire()

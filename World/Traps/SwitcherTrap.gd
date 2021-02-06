@@ -5,7 +5,7 @@ onready var bit_parent := $Wall/Sprite/Bits
 onready var switch_parent := $Switches
 onready var stone_parent := $Stones
 onready var wall := $Wall
-onready var safe_area := $SafeArea2D
+onready var safe_area := $SafeArea
 
 var bits := []
 var ties := []
@@ -21,12 +21,14 @@ func _ready() -> void:
 	ties = tie_parent.get_children()
 	switches = switch_parent.get_children()
 	stones = stone_parent.get_children()
+	for switch in switches:
+		switch.connect("status_change", self, "_on_Switch_status_change") 
 
 func update_sprites() -> void:
 	comb = [0,0,0,0]
 	for switch in switches:
 		if switch.is_pressed:
-			var activated:PoolStringArray = switch.text.split(",")
+			var activated:PoolStringArray = switch.data.split(",")
 			for nb in activated:
 				var link_index = int(nb) - 1
 				comb[link_index] = (comb[link_index] + 1) % 2
@@ -43,7 +45,7 @@ func update_sprites() -> void:
 	if total == 4:
 		wall.activate()		
 		
-func _on_Switch_pressed(_switch: Sign) -> void:
+func _on_Switch_status_change(pressed:bool) -> void:
 	activate_mechanism()
 	update_sprites()
 	
@@ -52,7 +54,7 @@ func activate_mechanism() -> void:
 		safe_area.set_deferred("monitoring", true)
 		is_activated = true
 		for stone in stones:
-			stone.activate()
+			stone.activate_slow()
 
 func reset_trap() -> void:
 	is_activated = false
@@ -62,7 +64,7 @@ func reset_trap() -> void:
 		switch.reset()
 	update_sprites()
 
-func _on_SafeArea2D_area_entered(_area) -> void:
+func _on_SafeArea_body_entered(body):
 	print("switcher solved!")
 	GameState.solved_switcher = true
 	safe_area.set_deferred("monitoring", false)

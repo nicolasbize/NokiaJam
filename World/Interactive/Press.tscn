@@ -1,35 +1,34 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Assets/Sprites/press.png" type="Texture" id=1]
 [ext_resource path="res://World/Interactive/Press.gd" type="Script" id=2]
+[ext_resource path="res://Colliders/PlayerTrigger.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 3, 3 )
+extents = Vector2( 3, 4 )
 
-[node name="Press" type="Node2D"]
+[node name="Press" type="StaticBody2D"]
+collision_mask = 0
 script = ExtResource( 2 )
+
+[node name="WorldCollider" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -4, 0, -2, -2, 2, -2, 4, 0 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
 centered = false
 offset = Vector2( -4, -2 )
 
-[node name="Area2D" type="Area2D" parent="."]
-collision_layer = 2147483664
-collision_mask = 2147483650
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( 0, -3 )
-shape = SubResource( 1 )
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-collision_mask = 0
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PoolVector2Array( -4, 0, -2, -2, 2, -2, 4, 0 )
-
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2
-[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="Area2D" to="." method="_on_Area2D_area_exited"]
+
+[node name="PlayerTrigger" parent="." instance=ExtResource( 3 )]
+
+[node name="CollisionShape2D" parent="PlayerTrigger" index="0"]
+position = Vector2( 0, -4 )
+shape = SubResource( 1 )
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="area_entered" from="PlayerTrigger" to="." method="_on_PlayerTrigger_area_entered"]
+[connection signal="area_exited" from="PlayerTrigger" to="." method="_on_PlayerTrigger_area_exited"]
+
+[editable path="PlayerTrigger"]

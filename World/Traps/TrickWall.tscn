@@ -5,11 +5,10 @@
 [ext_resource path="res://Assets/Sprites/wall.png" type="Texture" id=3]
 [ext_resource path="res://World/Traps/StoneBlock.gd" type="Script" id=4]
 
-
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 9 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 resource_name = "Activate"
 tracks/0/type = "value"
 tracks/0/path = NodePath("Path2D/PathFollow2D:unit_offset")
@@ -37,10 +36,10 @@ texture = ExtResource( 3 )
 centered = false
 offset = Vector2( 0, -19 )
 
-[node name="RigidBody2D" type="KinematicBody2D" parent="Sprite"]
-collision_mask = 2147483651
+[node name="WorldCollider" type="StaticBody2D" parent="Sprite"]
+collision_mask = 2147483648
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/RigidBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/WorldCollider"]
 position = Vector2( 3, -9 )
 shape = SubResource( 1 )
 __meta__ = {
@@ -97,7 +96,7 @@ texture = ExtResource( 1 )
 centered = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Activate = SubResource( 4 )
+anims/Activate = SubResource( 2 )
 
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource( 3 )

@@ -10,12 +10,11 @@ var state = null
 var is_attacking := false
 
 onready var sprite = $Sprite
-onready var collision_shape = $CollisionShape2D
 onready var floor_left = $FloorLeft
 onready var floor_right = $FloorRight
 onready var wall_left = $WallLeft
 onready var wall_right = $WallRight
-onready var vision_ray = $AttackArea/VisionRay
+onready var vision_ray = $EyeSightArea/VisionRay
 
 func _ready() -> void:
 	state = WALKING_DIRECTION
@@ -56,7 +55,6 @@ func update_animations() -> void:
 	else:
 		animation_player.play("Walk")
 	
-
-func _on_AttackArea_area_entered(_area) -> void:
+func _on_EyeSightArea_body_entered(body) -> void:
 	if not is_attacking:
 		is_attacking = true

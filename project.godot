@@ -9,13 +9,61 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node2D",
+"class": "Checkpoint",
+"language": "GDScript",
+"path": "res://World/Interactive/Checkpoint.gd"
+}, {
+"base": "StaticBody2D",
+"class": "DestroyableWall",
+"language": "GDScript",
+"path": "res://World/Walls/DestroyableWall.gd"
+}, {
+"base": "Sprite",
+"class": "FloorSpikes",
+"language": "GDScript",
+"path": "res://World/Traps/FloorSpikes.gd"
+}, {
+"base": "Area2D",
+"class": "HitBox",
+"language": "GDScript",
+"path": "res://Colliders/HitBox.gd"
+}, {
+"base": "Area2D",
+"class": "HurtBox",
+"language": "GDScript",
+"path": "res://Colliders/HurtBox.gd"
+}, {
+"base": "Node2D",
+"class": "Press",
+"language": "GDScript",
+"path": "res://World/Interactive/Press.gd"
+}, {
+"base": "Node2D",
+"class": "Projectile",
+"language": "GDScript",
+"path": "res://Projectiles/Projectile.gd"
+}, {
 "base": "Sprite",
 "class": "Sign",
 "language": "GDScript",
 "path": "res://World/Interactive/Sign.gd"
+}, {
+"base": "Sprite",
+"class": "Switch",
+"language": "GDScript",
+"path": "res://World/Interactive/Switch.gd"
 } ]
 _global_script_class_icons={
-"Sign": ""
+"Checkpoint": "",
+"DestroyableWall": "",
+"FloorSpikes": "",
+"HitBox": "",
+"HurtBox": "",
+"Press": "",
+"Projectile": "",
+"Sign": "",
+"Switch": ""
 }
 
 [application]
@@ -122,11 +170,11 @@ restart={
 2d_physics/layer_1="World"
 2d_physics/layer_2="Player"
 2d_physics/layer_3="Enemy"
-2d_physics/layer_4="Interactive"
-2d_physics/layer_5="Trigger"
-2d_physics/layer_6="Destroyable"
-2d_physics/layer_7="Projectiles"
-2d_physics/layer_8="Collectibles"
+2d_physics/layer_4="WorldProps"
+2d_physics/layer_5="PlayerTrigger"
+2d_physics/layer_6="DestroyableEnvironment"
+2d_physics/layer_9="PlayerHurtbox"
+2d_physics/layer_10="EnemyHurtbox"
 
 [physics]
 

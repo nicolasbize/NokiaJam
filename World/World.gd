@@ -25,6 +25,4 @@ func _process(_delta) -> void:
 		if not GameState.solved_switcher:
 			switcher.reset_trap()
 		ui.clear()
-
-func _on_Player_dying() -> void:
-	camera.screen_shake(0.3, 0.5)
+	

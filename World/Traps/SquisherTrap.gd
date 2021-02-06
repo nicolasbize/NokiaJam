@@ -16,13 +16,12 @@ func reset_trap() -> void:
 	animation_player.play("Reset")
 	switch.reset()
 
-func _on_Switch_pressed(_switch) -> void:
+func _on_Switch_status_change(pressed):
 	animation_player.play("Activate")
 	camera.screen_shake(0.1, 1.2)
 	safe_area.set_deferred("monitoring", true)
 
-func _on_SafeArea_area_entered(_area) -> void:
+func _on_SafeArea_body_entered(body):
 	print("squisher solved!")
 	GameState.solved_squisher = true
 	safe_area.set_deferred("monitoring", false)
-	

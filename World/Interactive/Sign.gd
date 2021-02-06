@@ -1,14 +1,17 @@
+## Because the previous tenants of this planet were nice enough to leave
+## signs written in English
 class_name Sign
 extends Sprite
 
-onready var animation_player := $AnimationPlayer
+onready var hint_pointer = $HintPointer
 
 export (String) var text := ""
-export (bool) var is_interactive := true
 
-func _on_Area2D_body_entered(_body) -> void:
-	if is_interactive:
-		animation_player.play("Hover")
-	
-func _on_Area2D_body_exited(_body) -> void:
-	animation_player.play("Idle")
+func _on_PlayerTrigger_area_entered(area):
+	hint_pointer.visible = true
+
+func _on_PlayerTrigger_area_exited(area):
+	hint_pointer.visible = false
+
+func _on_PlayerTrigger_use(player):
+	player.use_sign(text)

@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/Sprites/platform.png" type="Texture" id=1]
+[ext_resource path="res://World/Platforms/MovingPlatform.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 6, 2 )
@@ -29,6 +30,7 @@ tracks/0/keys = {
 }
 
 [node name="MovingPlatform" type="Node2D"]
+script = ExtResource( 2 )
 
 [node name="Line2D" type="Line2D" parent="."]
 position = Vector2( 0, 1 )
@@ -37,7 +39,6 @@ width = 1.0
 default_color = Color( 0.262745, 0.321569, 0.239216, 1 )
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
-position = Vector2( 31.8959, 0 )
 collision_mask = 6
 motion/sync_to_physics = true
 
@@ -53,8 +54,6 @@ visible = false
 curve = SubResource( 2 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2( 31.8959, 0 )
-offset = 31.9048
 rotate = false
 loop = false
 
@@ -62,6 +61,8 @@ loop = false
 remote_path = NodePath("../../../KinematicBody2D")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-autoplay = "Glide"
 playback_process_mode = 0
 anims/Glide = SubResource( 3 )
+
+[node name="StartTimer" type="Timer" parent="."]
+[connection signal="timeout" from="StartTimer" to="." method="_on_StartTimer_timeout"]
