@@ -6,7 +6,13 @@ export (float) var FRICTION = 0.35
 export (int) var GRAVITY = 220
 export (int) var JUMP_FORCE = 80
 export (int) var MAX_SLOPE_ANGLE = 46
+export (bool) var can_wall_jump = false
 
+enum {
+	MOVE, WALL_SLIDE
+}
+
+var state := MOVE
 var motion := Vector2.ZERO
 var snap_vector := Vector2.ZERO
 var just_jumped := false
@@ -24,18 +30,33 @@ onready var animation_player = $AnimationPlayer
 onready var interaction_area = $InteractionArea
 
 func _physics_process(delta) -> void:
+	just_jumped = false
 	if not is_dead:
 		visible = true
 		if not is_reading:
-			just_jumped = false
 			var input_vector := get_input_vector()
-			apply_horizontal_force(input_vector, delta)
-			apply_friction(input_vector)
-			jump_check()
-			duck_check()
-			apply_gravity(delta)
-			update_animations(input_vector)
-			move()
+			match state:
+				MOVE:
+					apply_horizontal_force(input_vector, delta)
+					apply_friction(input_vector)
+					jump_check()
+					duck_check()
+					apply_gravity(delta)
+					update_animations(input_vector)
+					move()
+					wall_slide_check()
+				WALL_SLIDE:
+					animation_player.play("WallSlide")
+					var wall_axis = get_wall_axis()
+					if wall_axis != 0:
+						sprite.scale.x = wall_axis
+					print("wall slide jump check")
+					wall_slide_jump_check(wall_axis, input_vector)
+					#wall_slide_drop_check(delta)
+					apply_gravity(delta)
+					move()
+					wall_detach_check(wall_axis)
+					
 		interaction_check()
 	else:
 		animation_player.play("Die")
@@ -123,6 +144,39 @@ func revive() -> void:
 	visible = true
 	motion = Vector2.ZERO
 
+func get_wall_axis() -> int:
+	var is_right_wall = test_move(transform, Vector2.RIGHT)
+	var is_left_wall = test_move(transform, Vector2.LEFT)
+	return int(is_left_wall) - int(is_right_wall)
+
+func wall_slide_jump_check(wall_axis, input_vector):
+	if Input.is_action_just_pressed("jump"):
+		if sign(wall_axis) == sign(input_vector.x):
+			motion.x = 2 * wall_axis * MAX_SPEED
+			motion.y = -JUMP_FORCE
+		else: # wall jumping against the same wall
+			motion.x = wall_axis * MAX_SPEED
+			motion.y = -JUMP_FORCE / 2
+		state = MOVE
+
+func wall_slide_drop_check(delta):
+		if Input.is_action_just_pressed("ui_right"):
+			motion.x = ACCELERATION * delta
+			state = MOVE
+		
+		if Input.is_action_just_pressed("ui_left"):
+			motion.x = -ACCELERATION * delta
+			state = MOVE
+
+func wall_slide_check() -> void:
+	if not is_on_floor() and is_on_wall() and can_wall_jump:
+		state = WALL_SLIDE
+
+func wall_detach_check(wall_axis):
+	if wall_axis == 0 or is_on_floor():
+		state = MOVE
+
 func _on_HurtArea_area_entered(_area) -> void:
 	is_dead = true
 	emit_signal("dying")
+
