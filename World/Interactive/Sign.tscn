@@ -5,7 +5,7 @@
 [ext_resource path="res://Colliders/HintPointer.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Colliders/PlayerTrigger.tscn" type="PackedScene" id=4]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 4 )
 
 [node name="Sign" type="Sprite"]
@@ -18,7 +18,7 @@ script = ExtResource( 2 )
 
 [node name="CollisionShape2D" parent="PlayerTrigger" index="0"]
 position = Vector2( 0, -4 )
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="HintPointer" parent="." instance=ExtResource( 3 )]
 visible = false

@@ -38,9 +38,9 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "Duck"
-length = 0.1
+[sub_resource type="Animation" id=10]
+resource_name = "Gloat"
+length = 3.0
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:frame")
@@ -53,6 +53,20 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 4 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "show_item"
+} ]
 }
 
 [sub_resource type="Animation" id=4]
@@ -139,7 +153,7 @@ centered = false
 offset = Vector2( -4, -8 )
 vframes = 2
 hframes = 5
-frame = 5
+frame = 4
 
 [node name="WorldCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
@@ -149,7 +163,7 @@ shape = SubResource( 1 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
 anims/Die = SubResource( 2 )
-anims/Duck = SubResource( 3 )
+anims/Gloat = SubResource( 10 )
 anims/Idle = SubResource( 4 )
 anims/Jump = SubResource( 5 )
 anims/Run = SubResource( 6 )
@@ -176,6 +190,7 @@ collision_mask = 0
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
 position = Vector2( 0, -3 )
 shape = SubResource( 9 )
+[connection signal="area_entered" from="PlayerTriggerEmitter" to="." method="_on_PlayerTriggerEmitter_area_entered"]
 [connection signal="hit" from="HurtBox" to="." method="_on_HurtBox_hit"]
 
 [editable path="HurtBox"]

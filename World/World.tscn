@@ -757,6 +757,7 @@ position = Vector2( -24, -24 )
 
 [node name="PowerCore" parent="Collectibles" instance=ExtResource( 20 )]
 position = Vector2( 15, -112 )
+script = null
 
 [node name="Boots" parent="Collectibles" instance=ExtResource( 21 )]
 position = Vector2( -16, 32 )
@@ -1071,6 +1072,6 @@ position = Vector2( -144, -32 )
 [connection signal="body_entered" from="Traps/Squisher/SafeArea" to="Traps/Squisher" method="_on_SafeArea_body_entered"]
 [connection signal="body_entered" from="Traps/Switcher/SafeArea" to="Traps/Switcher" method="_on_SafeArea_body_entered"]
 [connection signal="game_over" from="Player" to="." method="_on_Player_game_over"]
-[connection signal="game_over" from="Player" to="UI" method="_on_Player_game_over"]
+[connection signal="item_found" from="Player" to="." method="_on_Player_item_found"]
 [connection signal="start_reading" from="Player" to="UI" method="_on_Player_start_reading"]
 [connection signal="stop_reading" from="Player" to="UI" method="_on_Player_stop_reading"]

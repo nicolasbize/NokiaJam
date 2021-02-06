@@ -9,7 +9,7 @@ export (int) var MAX_SLOPE_ANGLE = 46
 export (bool) var can_wall_jump = false
 
 enum {
-	MOVE, WALL_SLIDE
+	MOVE, WALL_SLIDE, EQUIP
 }
 
 var state := MOVE
@@ -18,12 +18,13 @@ var snap_vector := Vector2.ZERO
 var just_jumped := false
 var is_reading := false
 var is_dead := false
-var is_ducking := false
 var camera:Camera2D = null
+var current_item = null
 
 signal stop_reading
 signal start_reading
 signal game_over
+signal item_found(name)
 
 onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
@@ -48,7 +49,6 @@ func _physics_process(delta) -> void:
 					apply_horizontal_force(input_vector, delta)
 					apply_friction(input_vector)
 					jump_check()
-					duck_check()
 					apply_gravity(delta)
 					update_animations(input_vector)
 					move()
@@ -58,12 +58,13 @@ func _physics_process(delta) -> void:
 					var wall_axis = get_wall_axis()
 					if wall_axis != 0:
 						sprite.scale.x = wall_axis
-					print("wall slide jump check")
 					wall_slide_jump_check(wall_axis, input_vector)
 					#wall_slide_drop_check(delta)
 					apply_gravity(delta)
 					move()
 					wall_detach_check(wall_axis)
+				EQUIP:
+					animation_player.play("Gloat")
 					
 		interaction_check()
 	else:
@@ -71,8 +72,7 @@ func _physics_process(delta) -> void:
 
 func get_input_vector() -> Vector2:
 	var input_vector := Vector2.ZERO
-	if not is_ducking:
-		input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	return input_vector
 
 func apply_horizontal_force(input_vector, delta) -> void:
@@ -87,12 +87,6 @@ func apply_friction(input_vector) -> void:
 func update_snap_vector() -> void:
 	if is_on_floor():
 		snap_vector = Vector2.DOWN
-
-func duck_check() -> void:
-	if not is_ducking and Input.is_action_pressed("ui_down"):
-		is_ducking = true
-	elif is_ducking and Input.is_action_just_released("ui_down"):
-		is_ducking = false
 
 func jump_check() -> void:
 	if is_on_floor():
@@ -127,10 +121,7 @@ func update_animations(input_vector) -> void:
 		sprite.scale.x = sign(input_vector.x)
 		animation_player.play("Run")
 	else:
-		if is_ducking:
-			animation_player.play("Duck")
-		else:
-			animation_player.play("Idle")
+		animation_player.play("Idle")
 	
 	if not is_on_floor():
 		animation_player.play("Jump")
@@ -186,3 +177,20 @@ func wall_detach_check(wall_axis):
 func _on_HurtBox_hit(damage):
 	camera.screen_shake(0.3, 0.5)
 	is_dead = true
+
+func _on_PlayerTriggerEmitter_area_entered(area):
+	if area.equipment != PlayerTrigger.ITEM.NONE:
+		state = EQUIP
+		current_item = area.get_parent()
+		current_item.position = position + Vector2.UP * 8
+		match area.equipment:
+			PlayerTrigger.ITEM.BOOTS:
+				can_wall_jump = true
+				
+func show_item():
+	emit_signal("item_found", current_item.info_name)
+
+func store_item():
+	state = MOVE
+	current_item.queue_free()
+	current_item = null
