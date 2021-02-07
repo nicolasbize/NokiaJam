@@ -153,6 +153,7 @@ func wall_slide_jump_check(wall_axis, input_vector):
 			motion.x = 2 * wall_axis * MAX_SPEED
 			motion.y = -JUMP_FORCE
 		else: # wall jumping against the same wall
+			print("same wall")
 			motion.x = wall_axis * MAX_SPEED
 			motion.y = -JUMP_FORCE / 2
 		state = MOVE

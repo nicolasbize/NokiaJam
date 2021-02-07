@@ -1,29 +1,31 @@
-extends "res://Monsters/Enemy.gd"
+extends Node2D
 
-enum FACING {DOWN = 180, UP = 0, LEFT = -90, RIGHT = 90}
-
-const KrakenBullet = preload("res://Monsters/KrakenBullet.tscn")
-
-export (FACING) var facing = FACING.DOWN
+const Bullet = preload("res://Projectiles/Bullet.tscn")
 
 onready var sprite := $Sprite
 onready var cooldown_timer := $CooldownTimer
+onready var nozzle := $Nozzle
+onready var vision_area := $VisionArea
+
+export(float) var cooldown_time = 1
+export(int) var bullet_speed = 20
 
 var is_player_visible := false
 
-func _process(delta):
-	sprite.rotation_degrees = facing
-
 func _on_VisionArea_area_entered(area):
-	is_player_visible = true
-	fire_bullet(area.global_position)
+	cooldown_timer.start(cooldown_time)
 
-func fire_bullet(target:Vector2):
-	
-	var bullet := KrakenBullet.instance()
-	bullet.global_position = sprite.global_position
-	bullet.set_aim(target - global_position)
-	get_tree().get_root().add_child(bullet)
+func fire():
+	for area in vision_area.get_overlapping_areas():
+		var bullet := Bullet.instance()
+		get_parent().add_child(bullet)
+		get_parent().move_child(bullet, 0)
+		bullet.global_position = nozzle.global_position
+		bullet.velocity = (area.global_position - global_position).normalized() * bullet_speed
+		cooldown_timer.start(cooldown_time)
 
 func _on_VisionArea_area_exited(area):
-	is_player_visible = false
+	cooldown_timer.stop()
+
+func _on_CooldownTimer_timeout():
+	fire()
