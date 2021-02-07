@@ -12,7 +12,7 @@ var selected_item := 0
 
 func _process(delta) -> void:
 	if help_container.visible:
-		if Input.is_action_just_pressed("interact"):
+		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_cancel"):
 			help_container.visible = false
 	else:
 		var nb_items = menu_container.get_child_count()
@@ -26,12 +26,12 @@ func _process(delta) -> void:
 			menu_container.get_children()[new_selection].select()
 			selected_item = new_selection
 		
-		if Input.is_action_just_pressed("interact"):
+		if Input.is_action_just_pressed("ui_accept"):
 			match selected_item:
 				NEW_GAME:
 					screen_dissolver.fade()
 					yield(get_tree().create_timer(2), "timeout")
-					get_tree().change_scene("res://World.tscn")
+					get_tree().change_scene("res://World/World.tscn")
 				HELP:
 					help_container.visible = true
 				QUIT:

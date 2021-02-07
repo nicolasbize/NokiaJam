@@ -1,10 +1,13 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Assets/Intro/logo.png" type="Texture" id=1]
 [ext_resource path="res://UI/MenuItem.tscn" type="PackedScene" id=2]
 [ext_resource path="res://UI/MainMenu.gd" type="Script" id=3]
 [ext_resource path="res://UI/ScreenDisolver.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Assets/Fonts/PixelFont.tres" type="DynamicFont" id=5]
+[ext_resource path="res://Assets/Sprites/noise.png" type="Texture" id=6]
+[ext_resource path="res://UI/dissolve.shader" type="Shader" id=7]
+[ext_resource path="res://Assets/Sounds/mainmenu.wav" type="AudioStream" id=8]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Idle"
@@ -120,6 +123,14 @@ tracks/1/keys = {
 "values": [ Vector2( 8, 0 ), Vector2( 6, 0 ) ]
 }
 
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 7 )
+shader_param/value = 0.0
+shader_param/noise_texture = ExtResource( 6 )
+
+[sub_resource type="StreamTexture" id=6]
+load_path = "res://.import/end_background.png-e8412a04fce05da9dcf477a0cb4c4028.stex"
+
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -206,6 +217,8 @@ anims/Idle = SubResource( 3 )
 anims/Selected = SubResource( 4 )
 
 [node name="ScreenDissolver" parent="." instance=ExtResource( 4 )]
+material = SubResource( 5 )
+texture = SubResource( 6 )
 
 [node name="HelpContainer" type="Control" parent="."]
 visible = false
@@ -252,12 +265,16 @@ margin_bottom = 29.0
 custom_fonts/font = ExtResource( 5 )
 custom_colors/font_color = Color( 0.262745, 0.321569, 0.239216, 1 )
 text = "Left/Right: Move
-Space: Jump
-E: Interact"
+Up: Interact
+Space: Jump"
 __meta__ = {
 "_edit_use_anchors_": false,
 "_editor_description_": ""
 }
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+autoplay = true
 
 [editable path="ColorRect/MenuContainer/MenuItem"]
 

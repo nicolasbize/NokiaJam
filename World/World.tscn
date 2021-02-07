@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=58 format=2]
 
 [ext_resource path="res://Assets/Tiles/tileset.png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
@@ -28,6 +28,9 @@
 [ext_resource path="res://World/Traps/BoulderTrap.gd" type="Script" id=26]
 [ext_resource path="res://Colliders/PlayerTrigger.tscn" type="PackedScene" id=27]
 [ext_resource path="res://World/Traps/KrakenTown.gd" type="Script" id=28]
+[ext_resource path="res://Assets/Sounds/equip.wav" type="AudioStream" id=29]
+[ext_resource path="res://Assets/Sounds/end.wav" type="AudioStream" id=30]
+[ext_resource path="res://Assets/Sounds/theme.wav" type="AudioStream" id=31]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
@@ -1088,16 +1091,17 @@ position = Vector2( 192, -88 )
 
 [node name="Boulder2" parent="Traps/Boulder" instance=ExtResource( 25 )]
 visible = false
-position = Vector2( 549.824, -287.994 )
-rotation = 2.70326
+position = Vector2( 170.688, -98.6726 )
+rotation = 1.40006
 
 [node name="Path2D" type="Path2D" parent="Traps/Boulder"]
 position = Vector2( -8, -128 )
 curve = SubResource( 24 )
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Traps/Boulder/Path2D"]
-position = Vector2( 552, -156 )
-rotation = 2.70326
+position = Vector2( 181, 36 )
+rotation = 1.40006
+offset = 466.749
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="Traps/Boulder/Path2D/PathFollow2D"]
 position = Vector2( -6.96832, 1.14447 )
@@ -1138,7 +1142,7 @@ text = "What a view!"
 
 [node name="Sign3" parent="Signs" instance=ExtResource( 3 )]
 position = Vector2( 336, 72 )
-text = "Here's a good boy"
+text = "Cute puppies ahead"
 
 [node name="Spikes" type="Node" parent="."]
 
@@ -1289,11 +1293,24 @@ position = Vector2( -40, -96 )
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( -24, -96 )
 z_index = 2
+can_wall_jump = false
 
 [node name="Camera2D" parent="." instance=ExtResource( 9 )]
 position = Vector2( -144, -32 )
 
 [node name="UI" parent="." instance=ExtResource( 4 )]
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="MusicMainTheme" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 31 )
+autoplay = true
+
+[node name="MusicEquipment" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 29 )
+
+[node name="MusicEnding" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 30 )
 [connection signal="checkpoint" from="Checkpoints/Checkpoint" to="." method="_on_Checkpoint_checkpoint"]
 [connection signal="checkpoint" from="Checkpoints/Checkpoint2" to="." method="_on_Checkpoint_checkpoint"]
 [connection signal="checkpoint" from="Checkpoints/Checkpoint6" to="." method="_on_Checkpoint_checkpoint"]
@@ -1310,6 +1327,7 @@ position = Vector2( -144, -32 )
 [connection signal="area_entered" from="Traps/Boulder/PlayerTrigger" to="Traps/Boulder" method="_on_PlayerTrigger_area_entered"]
 [connection signal="game_completed" from="Spaceship" to="." method="_on_Spaceship_game_completed"]
 [connection signal="game_over" from="Player" to="." method="_on_Player_game_over"]
+[connection signal="item_equipped" from="Player" to="." method="_on_Player_item_equipped"]
 [connection signal="item_found" from="Player" to="." method="_on_Player_item_found"]
 [connection signal="power_core_found" from="Player" to="Spaceship" method="_on_Player_power_core_found"]
 [connection signal="start_reading" from="Player" to="UI" method="_on_Player_start_reading"]

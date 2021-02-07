@@ -9,6 +9,8 @@ func reset_trap() -> void:
 	for platform in platforms.get_children():
 		platform.reset()
 	switch.reset()
+	for bullet in get_tree().get_nodes_in_group("Bullets"):
+		bullet.queue_free()
 
 func _on_SafeArea_body_entered(body):
 	print("kraken solved!")

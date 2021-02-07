@@ -20,6 +20,7 @@ func fire():
 		var bullet := Bullet.instance()
 		get_parent().add_child(bullet)
 		get_parent().move_child(bullet, 0)
+		bullet.add_to_group("Bullets")
 		bullet.global_position = nozzle.global_position
 		bullet.velocity = (area.global_position - global_position).normalized() * bullet_speed
 		cooldown_timer.start(cooldown_time)

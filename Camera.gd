@@ -11,6 +11,9 @@ func screen_shake(amount:float, duration:float) -> void:
 	shake = amount
 	timer.wait_time = duration
 	timer.start()
+	
+func stop_screen_shake() -> void:
+	shake = 0
 
 func _on_Timer_timeout() -> void:
 	shake = 0

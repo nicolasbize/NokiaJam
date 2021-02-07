@@ -28,7 +28,8 @@ var last_wall_axis := 0 # prevent from jump-walling on the same wall
 signal stop_reading
 signal start_reading
 signal game_over
-signal item_found(name)
+signal item_found
+signal item_equipped(name)
 signal power_core_found
 
 onready var sprite := $Sprite
@@ -187,11 +188,13 @@ func wall_detach_check(wall_axis):
 		state = MOVE
 
 func _on_HurtBox_hit(damage):
-	camera.screen_shake(0.3, 0.5)
-	is_dead = true
+	if not is_dead:
+		camera.screen_shake(0.3, 0.5)
+		is_dead = true
 
 func _on_PlayerTriggerEmitter_area_entered(area):
 	if area.equipment != PlayerTrigger.ITEM.NONE:
+		emit_signal("item_found")
 		state = EQUIP
 		current_item = area.get_parent()
 		current_item.position = position + Vector2.UP * 8
@@ -204,7 +207,7 @@ func _on_PlayerTriggerEmitter_area_entered(area):
 				
 				
 func show_item():
-	emit_signal("item_found", current_item.info_name)
+	emit_signal("item_equipped", current_item.info_name)
 
 func store_item():
 	state = MOVE

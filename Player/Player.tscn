@@ -153,6 +153,7 @@ centered = false
 offset = Vector2( -4, -8 )
 vframes = 2
 hframes = 5
+frame = 4
 
 [node name="WorldCollisionShape" type="CollisionShape2D" parent="."]
 visible = false

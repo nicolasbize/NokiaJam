@@ -1,14 +1,16 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Assets/Sprites/end_background.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Sprites/noise.png" type="Texture" id=2]
 [ext_resource path="res://UI/dissolve.shader" type="Shader" id=3]
 [ext_resource path="res://UI/ScreenDisolver.gd" type="Script" id=4]
 
-[sub_resource type="ShaderMaterial" id=1]
+[sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 3 )
 shader_param/value = 0.0
 shader_param/noise_texture = ExtResource( 2 )
+
+[sub_resource type="StreamTexture" id=4]
+load_path = "res://.import/end_background.png-e8412a04fce05da9dcf477a0cb4c4028.stex"
 
 [sub_resource type="Animation" id=2]
 resource_name = "FadeToBlack"
@@ -27,8 +29,8 @@ tracks/0/keys = {
 }
 
 [node name="ScreenDissolver" type="Sprite"]
-material = SubResource( 1 )
-texture = ExtResource( 1 )
+material = SubResource( 3 )
+texture = SubResource( 4 )
 centered = false
 script = ExtResource( 4 )
 

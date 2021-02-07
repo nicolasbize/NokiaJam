@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Assets/Fonts/PixelFont.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Intro/ShakingSprite.tscn" type="PackedScene" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Assets/Intro/hand.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Sounds/shutdown.wav" type="AudioStream" id=8]
 [ext_resource path="res://Intro/Intro.gd" type="Script" id=9]
+[ext_resource path="res://Assets/Sounds/crash.wav" type="AudioStream" id=10]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Intro"
@@ -225,10 +226,10 @@ tracks/17/loop_wrap = true
 tracks/17/imported = false
 tracks/17/enabled = true
 tracks/17/keys = {
-"times": PoolRealArray( 0, 2, 6, 32.5 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 2, 6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
-"values": [ false, true, false, true ]
+"values": [ false, true, false ]
 }
 tracks/18/type = "value"
 tracks/18/path = NodePath("Sounds/Alarm:playing")
@@ -292,6 +293,18 @@ tracks/22/keys = {
 "method": "show_main_menu"
 } ]
 }
+tracks/23/type = "value"
+tracks/23/path = NodePath("Sounds/Crash:playing")
+tracks/23/interp = 1
+tracks/23/loop_wrap = true
+tracks/23/imported = false
+tracks/23/enabled = true
+tracks/23/keys = {
+"times": PoolRealArray( 0, 32.5, 37 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
 
 [node name="Intro" type="CanvasLayer"]
 script = ExtResource( 9 )
@@ -330,8 +343,8 @@ frame = 2
 is_shaking = false
 
 [node name="PlanetSprite" type="Sprite" parent="."]
-position = Vector2( 42, 18 )
-scale = Vector2( 2, 2 )
+position = Vector2( 42, 18.3182 )
+scale = Vector2( 1.95455, 1.95455 )
 texture = ExtResource( 5 )
 hframes = 2
 frame = 1
@@ -421,6 +434,7 @@ __meta__ = {
 }
 
 [node name="FinalColor" type="ColorRect" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.780392, 0.941176, 0.847059, 1 )
@@ -439,3 +453,7 @@ volume_db = 5.0
 
 [node name="Shutdown" type="AudioStreamPlayer" parent="Sounds"]
 stream = ExtResource( 8 )
+
+[node name="Crash" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 10 )
+volume_db = -10.0
