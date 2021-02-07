@@ -38,7 +38,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=3]
 resource_name = "Gloat"
 length = 3.0
 loop = true
@@ -153,7 +153,6 @@ centered = false
 offset = Vector2( -4, -8 )
 vframes = 2
 hframes = 5
-frame = 4
 
 [node name="WorldCollisionShape" type="CollisionShape2D" parent="."]
 visible = false
@@ -163,7 +162,7 @@ shape = SubResource( 1 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
 anims/Die = SubResource( 2 )
-anims/Gloat = SubResource( 10 )
+anims/Gloat = SubResource( 3 )
 anims/Idle = SubResource( 4 )
 anims/Jump = SubResource( 5 )
 anims/Run = SubResource( 6 )

@@ -6,7 +6,9 @@ export (float) var FRICTION = 0.35
 export (int) var GRAVITY = 220
 export (int) var JUMP_FORCE = 80
 export (int) var MAX_SLOPE_ANGLE = 46
+export (float) var wall_jump_cushion_delay = 0.2
 export (bool) var can_wall_jump = false
+export (bool) var can_take_ship = false
 
 enum {
 	MOVE, WALL_SLIDE, EQUIP
@@ -18,13 +20,16 @@ var snap_vector := Vector2.ZERO
 var just_jumped := false
 var is_reading := false
 var is_dead := false
+var has_won := false
 var camera:Camera2D = null
 var current_item = null
+var last_wall_axis := 0 # prevent from jump-walling on the same wall
 
 signal stop_reading
 signal start_reading
 signal game_over
 signal item_found(name)
+signal power_core_found
 
 onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
@@ -40,7 +45,9 @@ func _ready() -> void:
 
 func _physics_process(delta) -> void:
 	just_jumped = false
-	if not is_dead:
+	if is_dead:
+		animation_player.play("Die")
+	elif not has_won:
 		visible = true
 		if not is_reading:
 			var input_vector := get_input_vector()
@@ -49,6 +56,7 @@ func _physics_process(delta) -> void:
 					apply_horizontal_force(input_vector, delta)
 					apply_friction(input_vector)
 					jump_check()
+					update_snap_vector()
 					apply_gravity(delta)
 					update_animations(input_vector)
 					move()
@@ -59,7 +67,6 @@ func _physics_process(delta) -> void:
 					if wall_axis != 0:
 						sprite.scale.x = wall_axis
 					wall_slide_jump_check(wall_axis, input_vector)
-					#wall_slide_drop_check(delta)
 					apply_gravity(delta)
 					move()
 					wall_detach_check(wall_axis)
@@ -67,8 +74,6 @@ func _physics_process(delta) -> void:
 					animation_player.play("Gloat")
 					
 		interaction_check()
-	else:
-		animation_player.play("Die")
 
 func get_input_vector() -> Vector2:
 	var input_vector := Vector2.ZERO
@@ -86,7 +91,9 @@ func apply_friction(input_vector) -> void:
 
 func update_snap_vector() -> void:
 	if is_on_floor():
-		snap_vector = Vector2.DOWN
+#		snap_vector = Vector2.DOWN
+		last_wall_axis = 0
+#		print("last_wall_axis = 0 (94)")
 
 func jump_check() -> void:
 	if is_on_floor():
@@ -134,8 +141,13 @@ func move() -> void:
 		
 func hide() -> void:
 	visible = false
-	emit_signal("game_over")
+	if is_dead:
+		emit_signal("game_over")
 
+func take_off() -> void:
+	visible = false
+	has_won = true
+			
 func revive() -> void:
 	animation_player.play("Idle")
 	is_dead = false
@@ -148,15 +160,14 @@ func get_wall_axis() -> int:
 	return int(is_left_wall) - int(is_right_wall)
 
 func wall_slide_jump_check(wall_axis, input_vector):
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump") and (last_wall_axis == 0 or wall_axis != last_wall_axis):
 		if sign(wall_axis) == sign(input_vector.x):
 			motion.x = 2 * wall_axis * MAX_SPEED
-			motion.y = -JUMP_FORCE
 		else: # wall jumping against the same wall
-			print("same wall")
-			motion.x = wall_axis * MAX_SPEED
-			motion.y = -JUMP_FORCE / 2
+			motion.x = - 2 * wall_axis * MAX_SPEED
+		motion.y = -JUMP_FORCE
 		state = MOVE
+		last_wall_axis = wall_axis
 
 func wall_slide_drop_check(delta):
 		if Input.is_action_just_pressed("ui_right"):
@@ -187,6 +198,10 @@ func _on_PlayerTriggerEmitter_area_entered(area):
 		match area.equipment:
 			PlayerTrigger.ITEM.BOOTS:
 				can_wall_jump = true
+			PlayerTrigger.ITEM.POWERCORE:
+				can_take_ship = true
+				emit_signal("power_core_found")
+				
 				
 func show_item():
 	emit_signal("item_found", current_item.info_name)

@@ -59,5 +59,6 @@ shape = SubResource( 3 )
 
 [node name="HintPointer" parent="." instance=ExtResource( 2 )]
 position = Vector2( 0, -8 )
+[connection signal="area_entered" from="PlayerTrigger" to="." method="_on_PlayerTrigger_area_entered"]
 
 [editable path="PlayerTrigger"]

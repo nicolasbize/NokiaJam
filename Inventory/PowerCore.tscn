@@ -7,9 +7,13 @@
 extents = Vector2( 2, 4 )
 
 [node name="PowerCore" instance=ExtResource( 1 )]
+info_name = "A Power Core!!"
 
 [node name="Sprite" parent="." index="0"]
 texture = ExtResource( 2 )
+
+[node name="PlayerTrigger" parent="." index="3"]
+equipment = 2
 
 [node name="CollisionShape2D" parent="PlayerTrigger" index="0"]
 shape = SubResource( 1 )

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Assets/Fonts/PixelFont.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Intro/ShakingSprite.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Assets/Sounds/alarm.wav" type="AudioStream" id=6]
 [ext_resource path="res://Assets/Intro/hand.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Sounds/shutdown.wav" type="AudioStream" id=8]
+[ext_resource path="res://Intro/Intro.gd" type="Script" id=9]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Intro"
@@ -277,8 +278,23 @@ tracks/21/keys = {
 "update": 0,
 "values": [ 2.0, 1.0 ]
 }
+tracks/22/type = "method"
+tracks/22/path = NodePath(".")
+tracks/22/interp = 1
+tracks/22/loop_wrap = true
+tracks/22/imported = false
+tracks/22/enabled = true
+tracks/22/keys = {
+"times": PoolRealArray( 39 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "show_main_menu"
+} ]
+}
 
 [node name="Intro" type="CanvasLayer"]
+script = ExtResource( 9 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Intro"

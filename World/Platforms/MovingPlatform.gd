@@ -5,6 +5,7 @@ export(NodePath) var switch = null
 
 onready var timer = $StartTimer
 onready var animation_player = $AnimationPlayer
+onready var path_follow_2d = $Path2D/PathFollow2D
 
 func _ready() -> void:
 	if switch == null:
@@ -17,3 +18,8 @@ func _on_Switch_status_change(pressed):
 
 func _on_StartTimer_timeout():
 	animation_player.play("Glide")
+
+func reset() -> void:
+	animation_player.stop()
+	path_follow_2d.offset = 0
+	timer.stop()

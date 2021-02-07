@@ -1,0 +1,266 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Assets/Intro/logo.png" type="Texture" id=1]
+[ext_resource path="res://UI/MenuItem.tscn" type="PackedScene" id=2]
+[ext_resource path="res://UI/MainMenu.gd" type="Script" id=3]
+[ext_resource path="res://UI/ScreenDisolver.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Assets/Fonts/PixelFont.tres" type="DynamicFont" id=5]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Idle"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("MenuLabel:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 8, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Arrow:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "Selected"
+length = 0.4
+step = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Arrow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("MenuLabel:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 8, 0 ), Vector2( 6, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "Idle"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("MenuLabel:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 8, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Arrow:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "Selected"
+length = 0.4
+step = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Arrow:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("MenuLabel:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 8, 0 ), Vector2( 6, 0 ) ]
+}
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Splash" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+margin_left = 57.0
+margin_top = 15.0
+margin_right = 83.0
+margin_bottom = 39.0
+color = Color( 0.262745, 0.321569, 0.239216, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_left = 56.0
+margin_top = 14.0
+margin_right = 82.0
+margin_bottom = 38.0
+color = Color( 0.262745, 0.321569, 0.239216, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuContainer" type="ColorRect" parent="ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = 1.0
+margin_right = -1.0
+margin_bottom = -1.0
+color = Color( 0.780392, 0.941176, 0.847059, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuItem" parent="ColorRect/MenuContainer" instance=ExtResource( 2 )]
+margin_top = 1.0
+margin_bottom = -15.0
+
+[node name="MenuLabel" parent="ColorRect/MenuContainer/MenuItem" index="0"]
+margin_right = 24.0
+text = "Play"
+
+[node name="Arrow" parent="ColorRect/MenuContainer/MenuItem" index="1"]
+visible = true
+
+[node name="AnimationPlayer" parent="ColorRect/MenuContainer/MenuItem" index="2"]
+autoplay = "Selected"
+
+[node name="MenuItem2" parent="ColorRect/MenuContainer" instance=ExtResource( 2 )]
+margin_top = 8.0
+margin_bottom = -8.0
+
+[node name="MenuLabel" parent="ColorRect/MenuContainer/MenuItem2" index="0"]
+margin_right = 24.0
+text = "Help"
+
+[node name="AnimationPlayer" parent="ColorRect/MenuContainer/MenuItem2" index="2"]
+anims/Idle = SubResource( 1 )
+anims/Selected = SubResource( 2 )
+
+[node name="MenuItem3" parent="ColorRect/MenuContainer" instance=ExtResource( 2 )]
+margin_top = 15.0
+margin_bottom = -1.0
+
+[node name="MenuLabel" parent="ColorRect/MenuContainer/MenuItem3" index="0"]
+margin_right = 23.0
+text = "Quit"
+
+[node name="AnimationPlayer" parent="ColorRect/MenuContainer/MenuItem3" index="2"]
+anims/Idle = SubResource( 3 )
+anims/Selected = SubResource( 4 )
+
+[node name="ScreenDissolver" parent="." instance=ExtResource( 4 )]
+
+[node name="HelpContainer" type="Control" parent="."]
+visible = false
+margin_right = 84.0
+margin_bottom = 48.0
+
+[node name="ColorRect3" type="ColorRect" parent="HelpContainer"]
+margin_left = 7.0
+margin_top = 6.0
+margin_right = 78.0
+margin_bottom = 43.0
+color = Color( 0.262745, 0.321569, 0.239216, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect4" type="ColorRect" parent="HelpContainer"]
+margin_left = 6.0
+margin_top = 5.0
+margin_right = 77.0
+margin_bottom = 42.0
+color = Color( 0.262745, 0.321569, 0.239216, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MenuContainer" type="ColorRect" parent="HelpContainer/ColorRect4"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 1.0
+margin_top = 1.0
+margin_right = -1.0
+margin_bottom = -1.0
+color = Color( 0.780392, 0.941176, 0.847059, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HelpContainer/ColorRect4/MenuContainer"]
+margin_left = 6.0
+margin_top = 5.0
+margin_right = 64.0
+margin_bottom = 29.0
+custom_fonts/font = ExtResource( 5 )
+custom_colors/font_color = Color( 0.262745, 0.321569, 0.239216, 1 )
+text = "Left/Right: Move
+Space: Jump
+E: Interact"
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[editable path="ColorRect/MenuContainer/MenuItem"]
+
+[editable path="ColorRect/MenuContainer/MenuItem2"]
+
+[editable path="ColorRect/MenuContainer/MenuItem3"]
