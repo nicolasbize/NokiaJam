@@ -27,6 +27,7 @@ shape = SubResource( 1 )
 
 [node name="HitBox" parent="." instance=ExtResource( 3 )]
 collision_mask = 256
+only_damage_on_landing = true
 
 [node name="CollisionShape2D" parent="HitBox" index="0"]
 position = Vector2( 5, -3 )

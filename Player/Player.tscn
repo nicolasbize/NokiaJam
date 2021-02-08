@@ -190,7 +190,15 @@ collision_mask = 0
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
 position = Vector2( 0.5, -3 )
 shape = SubResource( 9 )
+
+[node name="DropFromLeftWallTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="DropFromRightWallTimer" type="Timer" parent="."]
+one_shot = true
 [connection signal="area_entered" from="PlayerTriggerEmitter" to="." method="_on_PlayerTriggerEmitter_area_entered"]
 [connection signal="hit" from="HurtBox" to="." method="_on_HurtBox_hit"]
+[connection signal="timeout" from="DropFromLeftWallTimer" to="." method="_on_DropFromLeftWallTimer_timeout"]
+[connection signal="timeout" from="DropFromRightWallTimer" to="." method="_on_DropFromRightWallTimer_timeout"]
 
 [editable path="HurtBox"]

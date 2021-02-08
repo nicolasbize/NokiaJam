@@ -23,7 +23,9 @@ var is_dead := false
 var has_won := false
 var camera:Camera2D = null
 var current_item = null
-var last_wall_axis := 0 # prevent from jump-walling on the same wall
+var last_wall_axis := 0 # prevent jumping twice from same wall
+var can_drop_from_right_wall := false
+var can_drop_from_left_wall := false
 
 signal stop_reading
 signal start_reading
@@ -36,6 +38,8 @@ onready var sprite := $Sprite
 onready var animation_player := $AnimationPlayer
 onready var player_trigger_emitter := $PlayerTriggerEmitter
 onready var camera_follow := $CameraFollow
+onready var drop_from_left_wall_timer := $DropFromLeftWallTimer
+onready var drop_from_right_wall_timer := $DropFromRightWallTimer
 
 func _ready() -> void:
 	camera = get_node("/root/World/Camera2D")
@@ -57,7 +61,6 @@ func _physics_process(delta) -> void:
 					apply_horizontal_force(input_vector, delta)
 					apply_friction(input_vector)
 					jump_check()
-					update_snap_vector()
 					apply_gravity(delta)
 					update_animations(input_vector)
 					move()
@@ -68,6 +71,7 @@ func _physics_process(delta) -> void:
 					if wall_axis != 0:
 						sprite.scale.x = wall_axis
 					wall_slide_jump_check(wall_axis, input_vector)
+					wall_slide_drop_check(delta)
 					apply_gravity(delta)
 					move()
 					wall_detach_check(wall_axis)
@@ -89,12 +93,6 @@ func apply_horizontal_force(input_vector, delta) -> void:
 func apply_friction(input_vector) -> void:
 	if input_vector.x == 0:
 		motion.x = lerp(motion.x, 0, FRICTION)
-
-func update_snap_vector() -> void:
-	if is_on_floor():
-#		snap_vector = Vector2.DOWN
-		last_wall_axis = 0
-#		print("last_wall_axis = 0 (94)")
 
 func jump_check() -> void:
 	if is_on_floor():
@@ -150,10 +148,14 @@ func take_off() -> void:
 	has_won = true
 			
 func revive() -> void:
+	if is_reading:
+		emit_signal("stop_reading")
+		is_reading = false	
 	animation_player.play("Idle")
 	is_dead = false
 	visible = true
 	motion = Vector2.ZERO
+	
 
 func get_wall_axis() -> int:
 	var is_right_wall = test_move(transform, Vector2.RIGHT)
@@ -166,31 +168,52 @@ func wall_slide_jump_check(wall_axis, input_vector):
 			motion.x = 2 * wall_axis * MAX_SPEED
 		else: # wall jumping against the same wall
 			motion.x = - 2 * wall_axis * MAX_SPEED
-		motion.y = -JUMP_FORCE
+		motion.y = -JUMP_FORCE*1.1
 		state = MOVE
 		last_wall_axis = wall_axis
 
 func wall_slide_drop_check(delta):
-		if Input.is_action_just_pressed("ui_right"):
-			motion.x = ACCELERATION * delta
-			state = MOVE
-		
-		if Input.is_action_just_pressed("ui_left"):
-			motion.x = -ACCELERATION * delta
-			state = MOVE
+	if test_move(transform, Vector2.RIGHT): # wall on the right
+		if Input.is_action_pressed("ui_left"):
+			if can_drop_from_right_wall:
+				motion.x = ACCELERATION * delta
+				state = MOVE
+			elif drop_from_right_wall_timer.is_stopped():
+				drop_from_right_wall_timer.start(wall_jump_cushion_delay)
+				
+	if test_move(transform, Vector2.LEFT): # wall on the right
+		if Input.is_action_pressed("ui_right"):
+			if can_drop_from_left_wall:
+				motion.x = - ACCELERATION * delta
+				state = MOVE
+			elif drop_from_left_wall_timer.is_stopped():
+				drop_from_left_wall_timer.start(wall_jump_cushion_delay)
+			
+#	if Input.is_action_just_pressed("ui_right"):
+#		motion.x = ACCELERATION * delta
+#		state = MOVE
+	
+#	if Input.is_action_just_pressed("ui_left"):
+#		motion.x = -ACCELERATION * delta
+#		state = MOVE
 
 func wall_slide_check() -> void:
+	if is_on_floor():
+		last_wall_axis = 0
 	if not is_on_floor() and is_on_wall() and can_wall_jump:
 		state = WALL_SLIDE
+		can_drop_from_left_wall = false
+		can_drop_from_right_wall = false
 
 func wall_detach_check(wall_axis):
-	if wall_axis == 0 or is_on_floor():
+	if is_on_floor():
 		state = MOVE
 
-func _on_HurtBox_hit(damage):
+func _on_HurtBox_hit(damage, only_damage_on_landing):
 	if not is_dead:
-		camera.screen_shake(0.3, 0.5)
-		is_dead = true
+		if not only_damage_on_landing or motion.y >= 0:
+			camera.screen_shake(0.3, 0.5)
+			is_dead = true
 
 func _on_PlayerTriggerEmitter_area_entered(area):
 	if area.equipment != PlayerTrigger.ITEM.NONE:
@@ -213,3 +236,9 @@ func store_item():
 	state = MOVE
 	current_item.queue_free()
 	current_item = null
+
+func _on_DropFromRightWallTimer_timeout():
+	can_drop_from_right_wall = true
+
+func _on_DropFromLeftWallTimer_timeout():
+	can_drop_from_left_wall = true

@@ -70,6 +70,7 @@ extents = Vector2( 4, 3 )
 
 [node name="Slime" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
+ATTACK_SPEED = 50
 
 [node name="Sprite" parent="." index="0"]
 position = Vector2( 0, -4 )

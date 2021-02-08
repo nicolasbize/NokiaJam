@@ -3,4 +3,4 @@
 class_name HurtBox
 extends Area2D
 
-signal hit(damage) # emited when this hurtbox was hit
+signal hit(damage, only_damage_on_landing) # emited when this hurtbox was hit

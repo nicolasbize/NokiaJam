@@ -5,7 +5,7 @@ onready var platforms = $Platforms
 onready var switch = $KrakenSwitch
 
 func reset_trap() -> void:
-	safe_area.monitoring = false
+	safe_area.monitoring = true
 	for platform in platforms.get_children():
 		platform.reset()
 	switch.reset()

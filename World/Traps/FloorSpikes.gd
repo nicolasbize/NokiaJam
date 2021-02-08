@@ -2,8 +2,6 @@
 class_name FloorSpikes
 extends Sprite
 
-onready var hitbox = $HitBox
-
 func _on_PlayerTrigger_area_entered(area):
 	frame = 1
 
